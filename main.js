@@ -39,6 +39,13 @@ function brightMode() {
   
 let array = [];
 
+input.addEventListener("keypress", (press) => {
+  if(press.key == "Enter") {
+      arrayData();
+      input.value= "";
+  }
+})
+
 
 if (localStorage.getItem("input")) {
   array = JSON.parse(localStorage.getItem("input"));
@@ -54,7 +61,7 @@ inputBtn.addEventListener('click', function() {
 
 function arrayData() {
   const data = {
-    id: new Date(),
+    id: new Date().getTime(),
     value: input.value,
     completed: false,
   };
@@ -74,6 +81,7 @@ function addElements(elementData) {
     div.setAttribute("id", ele.id);
     //image
     let image = document.createElement("img");
+    image.classList = 'checkIcon';
     image.setAttribute("id", ele.id);
     if (ele.completed) {
       image.setAttribute("src", "images/checkIconTrue.png");
@@ -85,6 +93,10 @@ function addElements(elementData) {
     let para = document.createElement("p");
     para.setAttribute("id", ele.id);
     para.textContent = ele.value;
+    //deleteBtn
+    let deleteBtn = document.createElement("img");
+    deleteBtn.classList = "deleteBtn";
+    deleteBtn.setAttribute("src", "images/remove.png");
     //month and year and day
     let span = document.createElement("span");
     span.classList = "month-year";
@@ -106,10 +118,6 @@ function addElements(elementData) {
       getHour +
       ":" +
       getminutes;
-    //deleteBtn
-    let deleteBtn = document.createElement("img");
-    deleteBtn.classList = "deleteBtn";
-    deleteBtn.setAttribute("src", "images/remove.png");
     div.appendChild(image);
     div.appendChild(para);
     div.appendChild(span);
@@ -130,10 +138,28 @@ function getStorage() {
     let tasky = JSON.parse(getFromStorage)
     addElements(tasky);
   }
+
 }
 
+tasks.addEventListener('click', (eventClick) => {
+  if (eventClick.target.classList.contains("deleteBtn")) {
+    array = array.filter((e) => e.id != eventClick.target.parentElement.getAttribute("id"));
+    addLocal(array);
+    eventClick.target.parentElement.remove();
+    }
+  if (
+    eventClick.target.classList.contains("checkIcon") ||
+    eventClick.target.classList.contains("task") ||
+    eventClick.target.tagName == "P" 
+  ) {
+    togglee(eventClick.target.getAttribute("id"));
+  }
+  getStorage();
+}); 
+
+
 function togglee(a) {
-  for (i = 0; i < array.length; i++) {
+  for (let i = 0; i < array.length; i++) {
     if (array[i].id == a) {
       array[i].completed == false
         ? (array[i].completed = true)
@@ -142,20 +168,3 @@ function togglee(a) {
   }
   addLocal(array);
 }
-
-
-tasks.addEventListener('click',function (ex) {
-  if (ex.target.classList == "deleteBtn") {
-    array = array.filter((e) => e.id != ex.target.parentElement.getAttribute("id"));
-    addLocal(array);
-    ex.target.parentElement.remove();
-    }
-  if (
-    ex.target.tagName == "IMG" ||
-    ex.target.classList.contains("task") ||
-    ex.target.tagName == "P"
-  ) {
-    togglee(ex.target.getAttribute("id"));
-  }
-  getStorage();
-}); 
