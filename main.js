@@ -1,5 +1,3 @@
-
-
 // connect with our elements in html
 
 let lightBtn = document.getElementById("BrightDark");
@@ -8,6 +6,7 @@ let field = document.querySelector(".container");
 let input = document.querySelector(".content");
 let inputBtn = document.querySelector(".taskBtn");
 let tasks = document.querySelector(".bottom-section");
+let reset = document.querySelector(".reset");
 
 // dark mode && bright mode
 
@@ -15,6 +14,7 @@ lightBtn.addEventListener("click", function (event) {
   if (event.target.tagName == "I") {
     this.classList.toggle("dark");
     darkBtn.classList.toggle("dark");
+    clockContainer.classList.toggle("clockDark");
     darkMode();
   }
 });
@@ -22,6 +22,7 @@ darkBtn.addEventListener("click", function (e) {
   if (e.target.tagName == "IMG") {
     this.classList.toggle("dark");
     lightBtn.classList.toggle("dark");
+    clockContainer.classList.toggle("clockDark");
     brightMode();
   }
 });
@@ -35,28 +36,33 @@ function brightMode() {
   document.querySelector(".container h1").style.color = "rgb(39, 39, 39)";
 }
 
-///////////////////////////////////////////////////////////////////////////////////  
-  
+///////////////////////////////////////////////////////////////////////////////////
+/*delete all tasks*/
+reset.addEventListener("click", function () {
+  array = [];
+  addLocal(array);
+  getStorage();
+});
+
 let array = [];
 
 input.addEventListener("keypress", (press) => {
-  if(press.key == "Enter") {
-      arrayData();
-      input.value= "";
+  if (press.key == "Enter" && input.value !== "") {
+    arrayData();
+    input.value = "";
   }
-})
-
+});
 
 if (localStorage.getItem("input")) {
   array = JSON.parse(localStorage.getItem("input"));
 }
 getStorage();
 
-inputBtn.addEventListener('click', function() {
-    if(input.value !== "") {
-      arrayData();
-      input.value= "";
-    }
+inputBtn.addEventListener("click", function () {
+  if (input.value !== "") {
+    arrayData();
+    input.value = "";
+  }
 });
 
 function arrayData() {
@@ -68,8 +74,8 @@ function arrayData() {
   array.push(data);
   addLocal(array);
   getStorage();
-};
-            
+}
+
 // create Elements
 function addElements(elementData) {
   tasks.innerHTML = "";
@@ -81,7 +87,7 @@ function addElements(elementData) {
     div.setAttribute("id", ele.id);
     //image
     let image = document.createElement("img");
-    image.classList = 'checkIcon';
+    image.classList = "checkIcon";
     image.setAttribute("id", ele.id);
     if (ele.completed) {
       image.setAttribute("src", "images/checkIconTrue.png");
@@ -126,8 +132,6 @@ function addElements(elementData) {
   });
 }
 
-      
-
 function addLocal(arr) {
   window.localStorage.setItem("input", JSON.stringify(arr));
 }
@@ -135,28 +139,28 @@ function addLocal(arr) {
 function getStorage() {
   let getFromStorage = window.localStorage.getItem("input");
   if (getFromStorage) {
-    let tasky = JSON.parse(getFromStorage)
+    let tasky = JSON.parse(getFromStorage);
     addElements(tasky);
   }
-
 }
 
-tasks.addEventListener('click', (eventClick) => {
+tasks.addEventListener("click", (eventClick) => {
   if (eventClick.target.classList.contains("deleteBtn")) {
-    array = array.filter((e) => e.id != eventClick.target.parentElement.getAttribute("id"));
+    array = array.filter(
+      (e) => e.id != eventClick.target.parentElement.getAttribute("id")
+    );
     addLocal(array);
     eventClick.target.parentElement.remove();
-    }
+  }
   if (
     eventClick.target.classList.contains("checkIcon") ||
     eventClick.target.classList.contains("task") ||
-    eventClick.target.tagName == "P" 
+    eventClick.target.tagName == "P"
   ) {
     togglee(eventClick.target.getAttribute("id"));
   }
   getStorage();
-}); 
-
+});
 
 function togglee(a) {
   for (let i = 0; i < array.length; i++) {
@@ -168,3 +172,48 @@ function togglee(a) {
   }
   addLocal(array);
 }
+
+/* clock part */
+
+let clockContainer = document.querySelector(".clock");
+let setHour = document.querySelector(".hour");
+let setMinute = document.querySelector(".minute");
+let setSecond = document.querySelector(".second");
+let bottomClock = document.querySelector(".bottomClock p");
+
+setInterval(function infoClock() {
+  setHour.textContent =
+    new Date().getHours() < 10
+      ? `0${new Date().getHours()}`
+      : new Date().getHours();
+  setMinute.textContent =
+    new Date().getMinutes() < 10
+      ? `0${new Date().getMinutes()}`
+      : new Date().getMinutes();
+  setSecond.textContent =
+    new Date().getSeconds() < 10
+      ? `0${new Date().getSeconds()}`
+      : new Date().getSeconds();
+}, 1000);
+
+const today = new Date();
+
+const daysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+let monthName = today.toLocaleString(undefined, { month: "long" });
+let dayName = daysOfWeek[today.getDay()];
+let theYear = today.getFullYear();
+let theDay = today.getDate();
+
+//setData
+
+bottomClock.textContent =
+  dayName + " " + theDay + " " + monthName + " " + theYear;

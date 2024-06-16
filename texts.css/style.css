@@ -16,11 +16,12 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   font-family: "Quicksand", sans-serif;
   display: flex;
   align-items: center;
+  flex-direction: column;
 }
 
 /*for js things*/
@@ -40,6 +41,9 @@ body {
   padding: 20px;
   background-color: var(--back-colorbright);
   box-shadow: 0px 0px 20px var(--main-color);
+  position: relative;
+  margin-top: 30px;
+  margin-bottom: 50px;
 }
 
 .top-section {
@@ -194,4 +198,115 @@ img.deleteBtn {
 
 img.deleteBtn:hover {
   transform: scale(1.5);
+}
+
+/*style section clock in the top*/
+
+section.clock {
+  width: 600px;
+  margin: auto;
+  box-shadow: 0px 0px 20px var(--main-color);
+  min-height: 200px;
+  margin-top: 30px;
+}
+
+.clockDark {
+  background-color: var(--back-colordark);
+}
+
+.topClock {
+  height: fit-content;
+  text-align: center;
+  width: 100%;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+div.hours {
+  width: 80px;
+  background-color: #6b63ff;
+  box-shadow: 0 0 10px var(--main-color);
+}
+
+div.hours p {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.11);
+  padding: 7px;
+}
+
+div.minutes {
+  width: 80px;
+  background-color: #6b63ff;
+  box-shadow: 0 0 10px var(--main-color);
+}
+
+div.minutes p {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.11);
+  padding: 7px;
+}
+
+div.seconds {
+  width: 80px;
+  background-color: #ff7b7b;
+  box-shadow: 0 0 10px #ff7b7b;
+}
+
+div.seconds p {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.11);
+  padding: 7px;
+}
+.topClock span {
+  color: white;
+  font-size: 50px;
+}
+
+.bottomClock {
+  height: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottomClock p {
+  padding: 10px;
+  font-size: 19px;
+  color: var(--font-colorPara);
+  letter-spacing: 2px;
+}
+
+.reset {
+  bottom: 15px;
+  right: 20px;
+  margin: 5px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 50px;
+}
+
+.reset i {
+  font-size: 25px;
+  cursor: pointer;
+  color: var(--main-color);
+  animation: rotation 1s ease infinite alternate;
+  transition: 0.4s ease;
+}
+
+.reset:hover i {
+  color: red;
+}
+
+@keyframes rotation {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-5px);
+  }
 }
